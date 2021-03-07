@@ -113,6 +113,11 @@ class Extract:
                 10:'budget_year'}
 
         ten_year_budgets.rename(columns=cols, inplace=True)
+        
+        # for every id, find matching department id in ten_year_budgets and change the value
+        departments_2021_ids = departments_2021['department_number'].to_list()
 
-        ten_year_budgets['department_descirption'] = ten_year_budgets['department_description']\
-                                                        .apply(lambda dept_id: budgets_2021.loc[budgets_2021['department_number']==dept_id]['department_description'].values, axis=1)
+        for dept_id in departments_2021_ids:
+            ten_year_budgets.loc[(ten_year_budgets['department_number']==dept_id), 'department_description'] = departments_2021.loc[departments_2021['department_number']==dept_id]['department_description']
+
+        return ten_year_budgets
