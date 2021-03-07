@@ -99,4 +99,20 @@ class Extract:
         ten_year_budgets = Extract.portal_data()
         departments_2021 = Extract.pull_department_names()
 
-        
+        # first, we are just going to rename the columns
+        cols = {0:'fund_type',
+                1:'fund_code',
+                2:'fund_description',
+                3:'department_number',
+                4:'department_description',
+                5:'approp_authority',
+                6:'approp_auth_description',
+                7:'approp_account',
+                8:'approp_account_description',
+                9:'amount',
+                10:'budget_year'}
+
+        ten_year_budgets.rename(columns=cols, inplace=True)
+
+        ten_year_budgets['department_descirption'] = ten_year_budgets['department_description']\
+                                                        .apply(lambda dept_id: budgets_2021.loc[budgets_2021['department_number']==dept_id]['department_description'].values, axis=1)
