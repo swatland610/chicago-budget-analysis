@@ -30,6 +30,10 @@ class Extract:
         ]
         return budgets_list  
     
+    # The next three functions are chained together:
+    ## 1. Bring in all 10 sets and concat them on top of each other
+    ## 2. Pull 2021 department names to unify naming differences over the years
+    ## 3. Rename Columns & Set new values for Department names based on Department ID
     def portal_data():
         # Bring in Budgets
         budgets_list = Extract.build_budget_objects()
@@ -43,8 +47,9 @@ class Extract:
         for budget in budgets_list:
 
             # set budget year and url for pulling api data
+            # Be sure to make sure the 'limit' is set, as it defaults to only returning 1000 records
             budget_year = budget.budget_year
-            url = 'https://data.cityofchicago.org/resource/{}.json'.format(budget.endpoint_id)
+            url = 'https://data.cityofchicago.org/resource/{}.json?$limit=10000'.format(budget.endpoint_id)
 
             # initiate get request
             response = requests.get(url)
@@ -73,5 +78,25 @@ class Extract:
         return ten_year_budgets
 
     def pull_department_names():
-        # In our larger dataset
-        url = 'https://data.cityofchicago.org/resource/{}.json' 
+        # In our larger dataset the department descriptions vary from year to year, but 
+        # the department account id stay the same. Bringing in 2021 Data again to unify the
+        # department descriptions so they match 2021's data
+        url = 'https://data.cityofchicago.org/resource/6tbx-h7y2.json?$limit=10000' 
+
+        # initiate get request
+        response = requests.get(url)
+        response_dict = json.loads(response.text)
+
+        # Set DataFrame and Subset to needed Columns
+        budget_2021 = pd.DataFrame(response_dict)
+        departments_2021 = budget_2021.loc[:][['department_number', 'department_description']].\
+                                drop_duplicates(ignore_index=True)
+
+        return departments_2021
+
+    def set_col_labels_and_new_department_names():
+        # Bring in two DFs created in the prior 2 functions
+        ten_year_budgets = Extract.portal_data()
+        departments_2021 = Extract.pull_department_names()
+
+        
