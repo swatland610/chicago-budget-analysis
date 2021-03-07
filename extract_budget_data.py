@@ -5,7 +5,7 @@ import json
 # extract budget datas
 class Extract:
     def __init__(self):
-        self.extract_budgets = Extract.portal_data()
+        self.extract_budgets = Extract.set_col_labels_and_new_department_names()
 
     # creating a class to store the budget year with api endpoint
     class Budget_Data:
@@ -118,6 +118,10 @@ class Extract:
         departments_2021_ids = departments_2021['department_number'].to_list()
 
         for dept_id in departments_2021_ids:
-            ten_year_budgets.loc[(ten_year_budgets['department_number']==dept_id), 'department_description'] = departments_2021.loc[departments_2021['department_number']==dept_id]['department_description']
+            ten_year_budgets.loc[(ten_year_budgets['department_number']==dept_id), 'department_description'] = departments_2021[departments_2021['department_number']==dept_id]['department_description'].values
 
-        return ten_year_budgets
+        # set desire column order
+        cols = ['budget_year', 'fund_type', 'fund_code', 'fund_description', 'department_number', 'department_description',
+                'approp_authority', 'approp_auth_description', 'approp_account', 'approp_account_description', 'amount']
+
+        return ten_year_budgets[cols]
