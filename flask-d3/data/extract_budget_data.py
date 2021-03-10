@@ -124,4 +124,7 @@ class Extract:
         cols = ['budget_year', 'fund_type', 'fund_code', 'fund_description', 'department_number', 'department_description',
                 'approp_authority', 'approp_auth_description', 'approp_account', 'approp_account_description', 'amount']
 
-        return ten_year_budgets[cols]
+        # return value in correct order and convert it to json
+        return ten_year_budgets[cols].to_json()
+
+        
