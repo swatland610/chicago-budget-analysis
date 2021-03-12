@@ -128,8 +128,7 @@ class Extract:
         return ten_year_budgets[cols].to_json(orient='records')
 
         
-if __name__ == '__main__':
-    ten_year_budgets_json = Extract().extract_budgets
+#if __name__ == '__main__':
 
-    with open('ten_year_budgets.json', 'w') as json_file:
-        json.dumps(ten_year_budgets_json, json_file)
+#    with open('ten_year_budgets.json', 'w') as json_file:
+ #       json.dump(Extract().extract_budgets, json_file)
