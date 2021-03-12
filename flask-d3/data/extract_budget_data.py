@@ -125,6 +125,11 @@ class Extract:
                 'approp_authority', 'approp_auth_description', 'approp_account', 'approp_account_description', 'amount']
 
         # return value in correct order and convert it to json
-        return ten_year_budgets[cols].to_json()
+        return ten_year_budgets[cols].to_json(orient='records')
 
         
+if __name__ == '__main__':
+    ten_year_budgets_json = Extract().extract_budgets
+
+    with open('ten_year_budgets.json', 'w') as json_file:
+        json.dumps(ten_year_budgets_json, json_file)
