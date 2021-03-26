@@ -128,7 +128,7 @@ class Extract:
         return ten_year_budgets[cols]
 
         
-if __name__ == '__main__':
+#if __name__ == '__main__':
 
-    ten_year_budgets = Extract().extract_budgets
-    ten_year_budgets.to_csv('ten_year_budgets.csv')
+    #ten_year_budgets = Extract().extract_budgets
+    #ten_year_budgets.to_csv('ten_year_budgets.csv')
