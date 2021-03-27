@@ -9,6 +9,6 @@ class Data_Viz_Data:
     # total budget for each year
     def get_annual_budget_totals(self):
         data = Data_Viz_Data().ten_year_budgets 
-        annual_budgets_totals = data.groupby('budget_year').agg({'amount':'sum'})
+        annual_budgets_totals = data.groupby('budget_year').agg({'amount':'sum'}).reset_index()
         return annual_budgets_totals
     
