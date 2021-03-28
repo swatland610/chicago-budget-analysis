@@ -14,7 +14,7 @@ app = dash.Dash(__name__)
 annual_budgets_totals = Data_Viz_Data().get_annual_budget_totals()
 
 # pull in budget data
-annual_totals_fig = px.area(annual_budgets_totals, x='budget_year', y='amount')
+annual_totals_fig = px.area(annual_budgets_totals, x='budget_year', y='amount', color='dept_category')
 
 app.layout = html.Div(children = [
     html.H1(children='''

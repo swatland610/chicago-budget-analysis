@@ -117,18 +117,66 @@ class Extract:
         # for every id, find matching department id in ten_year_budgets and change the value
         departments_2021_ids = departments_2021['department_number'].to_list()
 
+        def assign_department_categories(dept_id):
+            # To get a better sense of general department functions, let's assign overall department categories
+            # Using whatever matches could be found within the 2020 Budget Review doc
+            # follow this link, and check out page 12: https://www.chicago.gov/content/dam/city/depts/obm/supp_info/2020Budget/2020BudgetOverview.pdf
+            
+            # Convert Department ID to Int as the ids are passed through as strings
+            dept_id = int(dept_id)
+
+            # set department categories
+            city_clerk = [25]
+            city_council = [15]
+            city_development = [21, 23, 54]
+            community_services = [41, 45, 48, 50, 91]
+            finance_administration = [5, 27, 28, 30, 31, 33, 35, 38]
+            finance_general = [99]
+            infrastructure_services = [81, 84, 85, 88]
+            legislative_elections = [39]
+            mayors_office = [1]
+            public_safety = [51, 55, 57, 58, 59, 60]
+            regulatory = [3, 67, 70, 73, 77, 78]
+
+            # run through each list to see if there's a match
+            if dept_id in city_clerk:
+                return "City Clerk"
+            elif dept_id in city_council:
+                return "City Council"
+            elif dept_id in city_development:
+                return "City Development"
+            elif dept_id in community_services:
+                return "Community Services"
+            elif dept_id in finance_administration:
+                return "Finance & Administration"
+            elif dept_id in finance_general:
+                return "Finance General"
+            elif dept_id in infrastructure_services:
+                return "Infrastructure Services"
+            elif dept_id in legislative_elections:
+                return "Legislative & Elections"
+            elif dept_id in mayors_office:
+                return "Mayor's Office"
+            elif dept_id in public_safety:
+                return "Public Safety"
+            elif dept_id in regulatory:
+                return "Regulatory"
+            else:
+                return "Other"
+        # grab department category
+        ten_year_budgets['dept_category'] = ten_year_budgets['department_number'].apply(lambda dept_id: assign_department_categories(dept_id))
+
         for dept_id in departments_2021_ids:
             ten_year_budgets.loc[(ten_year_budgets['department_number']==dept_id), 'department_description'] = departments_2021[departments_2021['department_number']==dept_id]['department_description'].values
 
         # set desire column order
-        cols = ['budget_year', 'fund_type', 'fund_code', 'fund_description', 'department_number', 'department_description',
+        cols = ['budget_year', 'fund_type', 'fund_code', 'fund_description', 'department_number', 'department_description', 'dept_category',
                 'approp_authority', 'approp_auth_description', 'approp_account', 'approp_account_description', 'amount']
 
         # return value in correct order and convert it to json
         return ten_year_budgets[cols]
 
-        
+# Uncomment below and run to refresh csv
 #if __name__ == '__main__':
-
-    #ten_year_budgets = Extract().extract_budgets
-    #ten_year_budgets.to_csv('ten_year_budgets.csv')
+#    ten_year_budgets = Extract().extract_budgets
+#    ten_year_budgets.to_csv('../ten_year_budgets.csv')
